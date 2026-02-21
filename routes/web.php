@@ -23,10 +23,14 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        // return view('dashboard');
+        return redirect('/home');
     })->name('dashboard');
 
     Route::get('/home', function (){
         return view('home');
     })->name('home');
+    Route::get('/roi', function (){
+        return view('roi');
+    })->name('roi');
 });

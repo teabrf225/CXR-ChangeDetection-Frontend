@@ -20,8 +20,6 @@
     </head>
 
     <body class="font-sans antialiased">
-        <x-banner />
-
         <div class="min-h-screen bg-gray-50">
             @livewire('navigation-menu')
 
@@ -35,13 +33,13 @@
             @endif -->
 
             <!-- Page Content -->
-            <main>
+            <main class="mt-8">
                 {{ $slot }}
             </main>
         </div>
 
         @stack('modals')
-
         @livewireScripts
     </body>
+
 </html>
