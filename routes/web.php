@@ -30,6 +30,11 @@ Route::middleware([
     Route::get('/home', function (){
         return view('home');
     })->name('home');
+
+    Route::get('/upload', function (){
+        return view('upload');
+    })->name('upload.form');
+
     Route::get('/roi', function (){
         return view('roi');
     })->name('roi');

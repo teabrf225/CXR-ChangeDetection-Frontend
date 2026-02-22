@@ -22,6 +22,11 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('upload.form') }}" :active="request()->routeIs('upload')">
+                        {{ __('Upload') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('roi') }}" :active="request()->routeIs('roi')">
                         {{ __('ROI') }}
                     </x-nav-link>
