@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ImageUploadController;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,9 +32,8 @@ Route::middleware([
         return view('home');
     })->name('home');
 
-    Route::get('/upload', function (){
-        return view('upload');
-    })->name('upload.form');
+    Route::get('/upload', [ImageUploadController::class, 'index'])->name('upload-image.form');
+    Route::post('/upload.process-images', [ImageUploadController::class, 'process'])->name('upload.images.process');
 
     Route::get('/roi', function (){
         return view('roi');

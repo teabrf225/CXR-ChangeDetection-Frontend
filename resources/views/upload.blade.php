@@ -14,62 +14,111 @@
 
     <div class="py-12">
         <div class="container">
-            <div class="row justify-content-md-center">
-                <div class="col col-lg-6 my-3 alert alert-warning text-center" role="alert">
-                    <strong>รูปที่ส่งให้โมเดล ผลลัพธ์ที่ได้ใช้เพื่อประกอบการตัดสินใจเท่านั้น</strong>
+            
+            <div class="row justify-content-center">
+                <div class="col-12 col-lg-10">
+                    <div class="mb-4 p-4 warning-card rounded-lg shadow-sm">
+                        <div class="d-flex align-items-center">
+                            <svg class="me-2" width="20" height="20" fill="#ed8936" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>
+                            </svg>
+                            <strong style="color: #9c4221;">Important Medical Disclaimer</strong>
+                        </div>
+                        <p class="mt-2 mb-0" style="font-size: 0.9rem; color: #4a5568;">
+                            The uploaded images will be processed by our AI model. Please note that the analysis results are intended for <strong>decision support only</strong> and should not be used as a standalone medical diagnosis.
+                        </p>
+                    </div>
+
+                    <div class="mb-1 p-6 instruction-card rounded-lg shadow-sm">
+                        <h2 class="text-xl font-bold mb-4" style="font-size: 1.5rem; color: #2d3748;">How to upload Chest X-Ray images</h2>
+                        <ul class="ml-5 space-y-2" style="list-style-type: decimal; color: #4a5568; line-height: 1.6;">
+                            <li>Please upload <strong>two distinct</strong> Chest X-Ray images for comparison.</li>
+                            <li><strong>Image 1 (Reference):</strong> This must be the earlier scan (past record) used as the baseline.</li>
+                            <li><strong>Image 2 (Current):</strong> This is the latest scan to be compared against the reference image.</li>
+                            <li>Ensure both images are in <strong>PNG or JPG</strong> format (Max <strong>9MB</strong> per file).</li>
+                            <li>Verify that the images are clear and correctly oriented for the best analysis results.</li>
+                        </ul>
+                    </div>
+
+                    <div class="row justify-content-center mt-4">
+                        <div class="col-12 col-lg-10 px-my-4">
+                            @if(session('error'))
+                                <div class="alert alert-danger shadow-sm">{{ session('error') }}</div>
+                            @endif
+
+                            @if($errors->any())
+                                <div class="alert alert-danger shadow-sm">
+                                    <ul class="mb-0">
+                                        @foreach($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <div class="card p-4 shadow-sm border-0">
+                        <form id="upload-form" action="{{ route('upload.images.process') }}" method="post" enctype="multipart/form-data">
+                            @csrf
+                            <div id="slots-container" class="row justify-content-center g-3">
+                                <div id="slot-1" class="col-12 transition-all">
+                                    <div class="drop-zone rounded p-3 text-center" id="zone-1">
+                                        <button type="button" class="btn-remove btn btn-danger" id="remove-1">✕</button>
+                                        <img id="preview-1" src="" class="preview-img">
+                                        <div id="display-name-1" class="file-name-label fw-bold"></div>
+                                        <div id="file-size-1" class="small text-muted" style="display: none;"></div>
+                                        <div id="placeholder-1">
+                                            <label for="image1" class="d-block mb-0" style="cursor:pointer;">
+                                                <img src="{{ asset('images/upload_clone_icon.png') }}" class="rounded mx-auto d-block" style="max-height: 3.5rem;">
+                                                <div class="fs-5 fw-bold mt-2">Upload Image 1</div>
+                                                <div class="small text-muted">PNG, JPG (Max 9MB)</div>
+                                                <div class="btn btn-outline-primary mt-3 px-5">BROWSE</div>
+                                            </label>
+                                        </div>
+                                        <input type="file" name="images[]" id="image1" class="file-input" accept="image/*" style="opacity: 0; position: absolute; top:0; left:0; width:100%; height:100%; cursor:pointer;">
+                                    </div>
+                                </div>
+
+                                <div id="slot-2" class="col-md-6 d-none transition-all">
+                                    <div class="drop-zone rounded p-3 text-center" id="zone-2">
+                                        <button type="button" class="btn-remove btn btn-danger" id="remove-2">✕</button>
+                                        <img id="preview-2" src="" class="preview-img">
+                                        <div id="display-name-2" class="file-name-label fw-bold"></div>
+                                        <div id="file-size-2" class="small text-muted" style="display: none;"></div>
+                                        <div id="placeholder-2">
+                                            <label for="image2" class="d-block mb-0" style="cursor:pointer;">
+                                                <img src="{{ asset('images/upload_clone_icon.png') }}" class="rounded mx-auto d-block" style="max-height: 3.5rem;">
+                                                <div class="fs-5 fw-bold mt-2">Upload Image 2</div>
+                                                <div class="small text-muted">PNG, JPG (Max 9MB)</div>
+                                                <div class="btn btn-outline-primary mt-3 px-5">BROWSE</div>
+                                            </label>
+                                        </div>
+                                        <input type="file" name="images[]" id="image2" class="file-input" accept=".png, .jpg, .jpeg" style="opacity: 0; position: absolute; top:0; left:0; width:100%; height:100%; cursor:pointer;">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="text-center mt-4">
+                                <button class="btn btn-dark" type="submit" style="padding:12px 6rem; border-radius: 8px; font-weight: bold;">
+                                    Submit Both Images
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
-            </div>
-            <div class="card m-md-4 p-4 shadow-sm">
-                <form id="upload-form" action="#" method="post" enctype="multipart/form-data">
-                    @csrf
-                    <div id="slots-container" class="row justify-content-center g-3">
-                        <div id="slot-1" class="col-12 transition-all">
-                            <div class="drop-zone rounded p-3 text-center" id="zone-1">
-                                <button type="button" class="btn-remove btn btn-danger" id="remove-1">✕</button>
-                                <img id="preview-1" src="" class="preview-img">
-                                <div id="display-name-1" class="file-name-label fw-bold"></div>
-                                <div id="placeholder-1">
-                                    <label for="image1" class="d-block mb-0" style="cursor:pointer;">
-                                        <img src="{{ asset('images/upload_clone_icon.png') }}" class="rounded mx-auto d-block" style="max-height: 3.5rem;">
-                                        <div class="fs-5 fw-bold mt-2">Upload Image 1</div>
-                                        <div class="small text-muted">PNG, JPG (Max 9MB)</div>
-                                        <div class="btn btn-outline-primary mt-3 px-5">BROWSE</div>
-                                    </label>
-                                </div>
-                                <input type="file" name="images[]" id="image1" class="file-input" accept="image/*" style="opacity: 0; position: absolute; top:0; left:0; width:100%; height:100%; cursor:pointer;">
-                            </div>
-                        </div>
-
-                        <div id="slot-2" class="col-md-6 d-none transition-all">
-                            <div class="drop-zone rounded p-3 text-center" id="zone-2">
-                                <button type="button" class="btn-remove btn btn-danger" id="remove-2">✕</button>
-                                <img id="preview-2" src="" class="preview-img">
-                                <div id="display-name-2" class="file-name-label fw-bold"></div>
-                                <div id="placeholder-2">
-                                    <label for="image2" class="d-block mb-0" style="cursor:pointer;">
-                                        <img src="{{ asset('images/upload_clone_icon.png') }}" class="rounded mx-auto d-block" style="max-height: 3.5rem;">
-                                        <div class="fs-5 fw-bold mt-2">Upload Image 2</div>
-                                        <div class="small text-muted">PNG, JPG (Max 9MB)</div>
-                                        <div class="btn btn-outline-primary mt-3 px-5">BROWSE</div>
-                                    </label>
-                                </div>
-                                <input type="file" name="images[]" id="image2" class="file-input" accept="image/*" style="opacity: 0; position: absolute; top:0; left:0; width:100%; height:100%; cursor:pointer;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="text-center mt-4">
-                        <button class="btn btn-dark" type="submit" style="padding:12px 6rem; border-radius: 8px; font-weight: bold;">
-                            Submit Both Images
-                        </button>
-                    </div>
-                </form>
             </div>
         </div>
     </div>
 
     <script>
         const maxSize = 9 * 1024 * 1024;
+        
+        window.addEventListener('pageshow', function(event) {
+            if (event.persisted || (window.performance && window.performance.navigation.type === 2)) {
+                window.location.reload();
+            }
+        });
 
         async function getFileHash(file) {
             const arrayBuffer = await file.arrayBuffer();
@@ -78,18 +127,39 @@
             return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
         }
 
+        function formatBytes(bytes, decimals = 2) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const dm = decimals < 0 ? 0 : decimals;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
         function handleFileSelect(input, slotNum) {
             const file = input.files[0];
             const preview = document.getElementById(`preview-${slotNum}`);
             const placeholder = document.getElementById(`placeholder-${slotNum}`);
             const removeBtn = document.getElementById(`remove-${slotNum}`);
             const nameLabel = document.getElementById(`display-name-${slotNum}`);
+            const sizeLabel = document.getElementById(`file-size-${slotNum}`);
             const slot = document.getElementById(`slot-${slotNum}`);
             const zone = document.getElementById(`zone-${slotNum}`);
 
             if (file) {
+                const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+                if (!allowedTypes.includes(file.type)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Invalid File Type',
+                        text: 'Please upload only PNG, JPG, or JPEG images.',
+                        confirmButtonColor: '#d33'
+                    });
+                    input.value = "";
+                    return;
+                }
                 if (file.size > maxSize) {
-                    Swal.fire({ icon: 'error', title: 'ไฟล์ใหญ่เกินไป', text: 'กรุณาเลือกไฟล์ขนาดไม่เกิน 9MB' });
+                    Swal.fire({ icon: 'error', title: 'File Too Large', text: 'Please select a file smaller than 9MB.' });
                     input.value = "";
                     return;
                 }
@@ -100,6 +170,8 @@
                     preview.style.display = 'block';
                     nameLabel.textContent = file.name;
                     nameLabel.style.display = 'block';
+                    sizeLabel.textContent = formatBytes(file.size);
+                    sizeLabel.style.display = 'block';
                     placeholder.style.display = 'none';
                     removeBtn.style.display = 'block';
                     if (slotNum === 1) {
@@ -117,6 +189,7 @@
             const placeholder = document.getElementById(`placeholder-${slotNum}`);
             const removeBtn = document.getElementById(`remove-${slotNum}`);
             const nameLabel = document.getElementById(`display-name-${slotNum}`);
+            const sizeLabel = document.getElementById(`file-size-${slotNum}`);
             const zone = document.getElementById(`zone-${slotNum}`);
 
             input.value = "";
@@ -124,6 +197,8 @@
             preview.style.display = 'none';
             nameLabel.textContent = "";
             nameLabel.style.display = 'none';
+            sizeLabel.textContent = "";
+            sizeLabel.style.display = 'none';
             placeholder.style.display = 'block';
             removeBtn.style.display = 'none';
             zone.classList.remove('is-invalid-zone');
@@ -152,15 +227,16 @@
 
                 Swal.fire({
                     icon: 'warning',
-                    title: 'ข้อมูลไม่ครบถ้วน',
-                    text: 'กรุณาอัปโหลดรูปภาพให้ครบทั้ง 2 ช่อง',
+                    title: 'Incomplete Information',
+                    text: 'Please upload images in both slots before submitting.',
                     confirmButtonColor: '#212529'
                 });
                 return;
             }
 
             Swal.fire({
-                title: 'กำลังตรวจสอบข้อมูล...',
+                title: 'Verifying Data...',
+                text: 'Please wait while we check your files.',
                 allowOutsideClick: false,
                 didOpen: () => { Swal.showLoading(); }
             });
@@ -172,24 +248,29 @@
                 if (hash1 === hash2) {
                     Swal.fire({
                         icon: 'error',
-                        title: 'รูปภาพซ้ำกัน',
-                        text: 'คุณไม่สามารถใช้รูปภาพเดียวกันทั้ง 2 ช่องได้ กรุณาเลือกรูปที่ต่างกัน',
+                        title: 'Duplicate Images Detected',
+                        text: 'You cannot use the same image for both slots. Please select different images.',
                         confirmButtonColor: '#d33'
                     });
                     return;
                 }
 
                 Swal.fire({
-                    title: 'กำลังอัปโหลด...',
-                    text: 'กรุณารอสักครู่ขณะนี้ระบบส่งรูปภาพไปยังหน้า ROI',
+                    title: 'Uploading...',
+                    text: 'Redirecting to ROI processing page, please wait.',
                     allowOutsideClick: false,
                     didOpen: () => { Swal.showLoading(); }
                 });
-                document.getElementById('upload-form').submit();
+                
+                this.submit();
 
             } catch (error) {
                 console.error(error);
-                Swal.fire({ icon: 'error', title: 'เกิดข้อผิดพลาด', text: 'ไม่สามารถตรวจสอบไฟล์ได้ กรุณาลองใหม่อีกครั้ง' });
+                Swal.fire({ 
+                    icon: 'error', 
+                    title: 'Process Failed', 
+                    text: 'Could not verify files. Please try again.' 
+                });
             }
         });
     </script>
