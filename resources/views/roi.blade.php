@@ -160,6 +160,9 @@
                                 toast: false,
                                 position: 'center'
                             });
+                            
+                            // temporary navigation
+                            window.location.href = 'home'
 
                         } catch (error) {
                             Swal.fire({
