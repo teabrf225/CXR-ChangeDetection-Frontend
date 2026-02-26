@@ -66,7 +66,7 @@
                             <div class="col-12 col-md-4 text-center">
                                 <div class="section-title text-primary">Reference</div>
                                 <div class="result-zone shadow-sm">
-                                    <img src="{{ session('image1_url', 'https://www.meddean.luc.edu/lumen/meded/medicine/pulmonar/cxr/atlas/images/71bl.jpg') }}" 
+                                    <img src="{{ session('image1_url', 'https://demofree.sirv.com/nope-not-here.jpg') }}" 
                                          class="result-img" id="reference_image">
                                 </div>
                                 <div class="file-name-label">
@@ -77,7 +77,7 @@
                             <div class="col-12 col-md-4 text-center">
                                 <div class="section-title text-success">Target</div>
                                 <div class="result-zone shadow-sm">
-                                    <img src="{{ session('image2_url', 'https://litfl.com/wp-content/uploads/2018/05/CXR-CASE-150-CXR-LITFL.jpg') }}" 
+                                    <img src="{{ session('image2_url', 'https://demofree.sirv.com/nope-not-here.jpg') }}" 
                                          class="result-img" id="target_image">
                                 </div>
                                 <div class="file-name-label">
@@ -88,7 +88,7 @@
                             <div class="col-12 col-md-4 text-center">
                                 <div class="section-title text-danger">Change Map</div>
                                 <div class="result-zone shadow-sm" style="background-color: #fff5f5; border-color: #feb2b2;">
-                                    <img src="{{ session('image_change_map_url','https://preview.redd.it/added-a-gradient-map-over-a-recent-chest-x-ray-with-v0-568p21pwugle1.jpg?width=1080&crop=smart&auto=webp&s=d406b81e673512baf4b4c4a2bb9831e595f9d31b') }}" 
+                                    <img src="{{ session('image_change_map_url','https://demofree.sirv.com/nope-not-here.jpg') }}" 
                                          class="result-img" style="opacity: 0.8;" id="changemap_image">
                                     <div class="badge bg-danger position-absolute bottom-0 w-100 py-2" style="border-radius: 0;">
                                         CHANGE DETECTED
@@ -132,9 +132,9 @@
 
             const zip = new JSZip();
             const images = [
-                { id: 'img-reference', name: '01_reference' },
-                { id: 'img-target', name: '02_target' },
-                { id: 'img-changemap', name: '03_change_map' }
+                { id: 'reference_image', name: '01_reference' },
+                { id: 'target_image', name: '02_target' },
+                { id: 'changemap_image', name: '03_change_map' }
             ];
 
             let fileCount = 0;
