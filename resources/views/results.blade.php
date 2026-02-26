@@ -66,7 +66,7 @@
                             <div class="col-12 col-md-4 text-center">
                                 <div class="section-title text-primary">Reference</div>
                                 <div class="result-zone shadow-sm">
-                                    <img src="{{ session('image1_url', 'https://demofree.sirv.com/nope-not-here.jpg') }}" 
+                                    <img src="{{ $source }}" 
                                          class="result-img" id="reference_image">
                                 </div>
                                 <div class="file-name-label">
@@ -77,7 +77,7 @@
                             <div class="col-12 col-md-4 text-center">
                                 <div class="section-title text-success">Target</div>
                                 <div class="result-zone shadow-sm">
-                                    <img src="{{ session('image2_url', 'https://demofree.sirv.com/nope-not-here.jpg') }}" 
+                                    <img src="{{ $target }}" 
                                          class="result-img" id="target_image">
                                 </div>
                                 <div class="file-name-label">
@@ -88,7 +88,7 @@
                             <div class="col-12 col-md-4 text-center">
                                 <div class="section-title text-danger">Change Map</div>
                                 <div class="result-zone shadow-sm" style="background-color: #fff5f5; border-color: #feb2b2;">
-                                    <img src="{{ session('image_change_map_url','https://demofree.sirv.com/nope-not-here.jpg') }}" 
+                                    <img src="{{ $changeMap }}" 
                                          class="result-img" style="opacity: 0.8;" id="changemap_image">
                                     <div class="badge bg-danger position-absolute bottom-0 w-100 py-2" style="border-radius: 0;">
                                         CHANGE DETECTED

@@ -101,7 +101,7 @@
 
                             <div class="text-center mt-4">
                                 <button class="btn btn-dark" type="submit" style="padding:12px 6rem; border-radius: 8px; font-weight: bold;">
-                                    Submit Both Images
+                                    Submit
                                 </button>
                             </div>
                         </form>

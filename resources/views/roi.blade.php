@@ -2,43 +2,49 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg p-8">
-                
+
                 <div class="mb-10 p-6 bg-gray-50 rounded-lg border-l-4 border-blue-500">
                     <h2 class="text-xl font-bold mb-4">How to set your ROI</h2>
                     <ul class="list-decimal ml-5 space-y-2 text-gray-600">
-                        <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
-                        <li>Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</li>
-                        <li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</li>
-                        <li>Duis aute irure dolor in reprehenderit in voluptate velit esse.</li>
-                        <li>Excepteur sint occaecat cupidatat non proident, sunt in culpa.</li>
+                        <li><strong>Reference Point</strong> Click a clear anatomical landmark (e.g., shoulder bone) in
+                            Image A.</li>
+                        <li><strong>Identical Match</strong> Click the <b>same</b> landmark in Image B. Accuracy here
+                            is vital for contrast adjustment.</li>
+                        <li><strong>Visual Verification</strong> Ensure both ROI boxes align with the same body
+                            structure in both frames.</li>
+                        <li><strong>Analyze</strong> Click "Submit" to synchronize pixel intensity and start AI
+                            processing.</li>
                     </ul>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
                     <div class="flex flex-col items-center">
                         <span class="mb-2 font-semibold text-gray-700">Source Image A</span>
-                        <div class="relative border-2 border-dashed border-gray-300 cursor-crosshair overflow-hidden w-full bg-gray-100" id="container-1">
-                            <img src="{{ session('image1_url','https://demofree.sirv.com/nope-not-here.jpg') }}" 
-                                alt="Test 1" 
-                                class="w-full h-full object-contain select-none pointer-events-none">
+                        <div class="relative border-2 border-dashed border-gray-300 cursor-crosshair overflow-hidden w-full bg-gray-100"
+                            id="container-1">
+                            <img src="{{ session('image1_url', 'https://demofree.sirv.com/nope-not-here.jpg') }}"
+                                alt="Test 1" class="w-full h-full object-contain select-none pointer-events-none">
                         </div>
-                        <p class="mt-2 text-sm text-gray-500 font-mono">Coords: <span id="coords-1">None</span></p>
+                        <p class="mt-2 text-sm text-gray-500 font-mono">Coords (center): <span id="coords-1">None</span>
+                        </p>
                     </div>
 
                     <div class="flex flex-col items-center">
                         <span class="mb-2 font-semibold text-gray-700">Source Image B</span>
-                        <div class="relative border-2 border-dashed border-gray-300 cursor-crosshair overflow-hidden w-full bg-gray-100" id="container-2">
-                            <img src="{{ session('image2_url','https://demofree.sirv.com/nope-not-here.jpg') }}" 
-                                alt="Test 2" 
-                                class="w-full h-full object-contain select-none pointer-events-none">
+                        <div class="relative border-2 border-dashed border-gray-300 cursor-crosshair overflow-hidden w-full bg-gray-100"
+                            id="container-2">
+                            <img src="{{ session('image2_url', 'https://demofree.sirv.com/nope-not-here.jpg') }}"
+                                alt="Test 2" class="w-full h-full object-contain select-none pointer-events-none">
                         </div>
-                        <p class="mt-2 text-sm text-gray-500 font-mono">Coords: <span id="coords-2">None</span></p>
+                        <p class="mt-2 text-sm text-gray-500 font-mono">Coords (center): <span id="coords-2">None</span>
+                        </p>
                     </div>
                 </div>
 
                 <div class="flex justify-center border-t pt-6 mb-6">
-                    <button id="submit-roi" type="button" class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
-                        Submit ROI Data
+                    <button id="submit-roi" type="button"
+                        class="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded">
+                        Submit
                     </button>
                 </div>
             </div>
@@ -55,7 +61,7 @@
             position: absolute;
             transform: translate(-50%, -50%);
             pointer-events: none;
-            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
         }
     </style>
 
@@ -74,101 +80,143 @@
 
                 el.addEventListener('click', (e) => {
                     const rect = el.getBoundingClientRect();
-                    
-                    const xPx = e.clientX - rect.left;
-                    const yPx = e.clientY - rect.top;
+                    const expandPx = 10;
 
-                    const xPercent = ((xPx / rect.width) * 100).toFixed(2);
-                    const yPercent = ((yPx / rect.height) * 100).toFixed(2);
+                    const clickX = e.clientX - rect.left;
+                    const clickY = e.clientY - rect.top;
 
-                    containers[index].x = xPercent;
-                    containers[index].y = yPercent;
+                    const xMin = Math.max(0, clickX - expandPx);
+                    const yMin = Math.max(0, clickY - expandPx);
+                    const xMax = Math.min(rect.width, clickX + expandPx);
+                    const yMax = Math.min(rect.height, clickY + expandPx);
 
-                    const existingDot = el.querySelector('.dot');
-                    if (existingDot) existingDot.remove();
+                    const roi = {
+                        x1: (xMin / rect.width).toFixed(4),
+                        y1: (yMin / rect.height).toFixed(4),
+                        x2: (xMax / rect.width).toFixed(4),
+                        y2: (yMax / rect.height).toFixed(4)
+                    };
 
-                    const dot = document.createElement('div');
-                    dot.className = 'dot';
-                    dot.style.left = `${xPx}px`;
-                    dot.style.top = `${yPx}px`;
-                    el.appendChild(dot);
+                    containers[index].roi = roi;
 
-                    display.innerText = `X: ${xPercent}%, Y: ${yPercent}%`;
+                    const existingBox = el.querySelector('.roi-box');
+                    if (existingBox) existingBox.remove();
+
+                    const box = document.createElement('div');
+                    box.className = 'roi-box';
+                    box.style.position = 'absolute';
+                    box.style.left = `${xMin}px`;
+                    box.style.top = `${yMin}px`;
+                    box.style.width = `${xMax - xMin}px`;
+                    box.style.height = `${yMax - yMin}px`;
+                    box.style.border = '2px solid red';
+                    box.style.pointerEvents = 'none';
+
+                    el.appendChild(box);
+
+                    const centerX = (clickX / rect.width).toFixed(4);
+                    const centerY = (clickY / rect.height).toFixed(4);
+
+                    display.innerText = `X: ${centerX}, Y: ${centerY}`;
                 });
             });
 
             const submitBtn = document.getElementById('submit-roi');
-            
+
             if (submitBtn) {
                 submitBtn.addEventListener('click', async () => {
-                    if (!containers[0].x || !containers[1].x) {
-                        Swal.fire({
-                            icon: 'warning',
-                            title: 'Missing Selection',
-                            text: 'Please click on both images to set your ROI points before submitting.',
-                            confirmButtonColor: '#3b82f6',
-                        });
+                    if (!containers[0].roi || !containers[1].roi) {
+                        Swal.fire({ icon: 'warning', title: 'Missing ROI', text: 'Please click on both images to set your ROI.' });
                         return;
                     }
 
-                    const confirmResult = await Swal.fire({
-                        title: 'Confirm Reference Points?',
-                        text: "Do you want to start process?",
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes, Start',
-                        cancelButtonText: 'Review again',
-                        confirmButtonColor: '#22c55e',
-                        cancelButtonColor: '#6b7280',
+                    submitBtn.disabled = true;
+                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+
+                    Swal.fire({
+                        title: 'AI Processing...',
+                        html: 'Please wait while we analyze the images.',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
                     });
 
-                    if (confirmResult.isConfirmed) {
-                        Swal.fire({
-                            title: 'Calculating...',
-                            html: 'AI in progress please wait a moment.',
-                            allowOutsideClick: false,
-                            didOpen: () => {
-                                Swal.showLoading();
-                            }
+                    try {
+                        const otpResponse = await fetch('/get-api-key', {
+                            headers: { 'Accept': 'application/json' }
                         });
 
+                        if (!otpResponse.ok) throw new Error('Failed to synchronize security key.');
+                        const otpData = await otpResponse.json();
+
                         const payload = {
-                            _token: '{{ csrf_token() }}',
-                            image_a: { x: containers[0].x, y: containers[0].y },
-                            image_b: { x: containers[1].x, y: containers[1].y }
+                            image1_base64: "{{ session('image1_base64') }}",
+                            image2_base64: "{{ session('image2_base64') }}",
+                            roi: {
+                                target: {
+                                    xy_start: [parseFloat(containers[0].roi.x1), parseFloat(containers[0].roi.y1)],
+                                    xy_end: [parseFloat(containers[0].roi.x2), parseFloat(containers[0].roi.y2)]
+                                },
+                                source: {
+                                    xy_start: [parseFloat(containers[1].roi.x1), parseFloat(containers[1].roi.y1)],
+                                    xy_end: [parseFloat(containers[1].roi.x2), parseFloat(containers[1].roi.y2)]
+                                }
+                            }
                         };
 
-                        try {
-                            console.log('Final Payload:', payload);
-                            
-                            // --- SIMULATED API CALL ---
-                            await new Promise((resolve) => setTimeout(resolve, 1500)); 
-                            // const response = await fetch('/your-endpoint', {
-                            //     method: 'POST',
-                            //     headers: { 'Content-Type': 'application/json' },
-                            //     body: JSON.stringify(payload)
-                            // });
-                            // if (!response.ok) throw new Error('Network error');
-                            // ----------------------------
+                        const response = await fetch('http://127.0.0.1:8701/api/v1/analyze', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'x-api-key': otpData.otp
+                            },
+                            body: JSON.stringify(payload)
+                        });
 
+                        const result = await response.json();
+
+                        if (result.status === 'success') {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Success!',
-                                // text: 'Successfully.',
-                                timer: 2500,
-                                showConfirmButton: false,
-                                toast: false,
-                                position: 'center'
+                                title: 'Analysis Complete',
+                                text: 'Redirecting to results...',
+                                timer: 1500,
+                                showConfirmButton: false
                             });
 
-                        } catch (error) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Submission Failed',
-                                text: 'There was an error saving your data. Please try again.',
+                            const form = document.createElement('form');
+                            form.method = 'POST';
+                            form.action = "{{ route('results.show') }}";
+
+                            const csrfInput = document.createElement('input');
+                            csrfInput.type = 'hidden';
+                            csrfInput.name = '_token';
+                            csrfInput.value = "{{ csrf_token() }}";
+                            form.appendChild(csrfInput);
+
+                            const fields = ['image_source', 'image_target', 'image_changeMap'];
+                            fields.forEach(fieldName => {
+                                const input = document.createElement('input');
+                                input.type = 'hidden';
+                                input.name = fieldName;
+                                input.value = result[fieldName];
+                                form.appendChild(input);
                             });
-                            console.error('Submission error:', error);
+
+                            document.body.appendChild(form);
+                            form.submit();
+
+                        } else {
+                            throw new Error(result.message || 'AI processing failed.');
                         }
+
+                    } catch (error) {
+                        submitBtn.disabled = false;
+                        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+
+                        Swal.fire({ icon: 'error', title: 'Error', text: error.message });
                     }
                 });
             }
