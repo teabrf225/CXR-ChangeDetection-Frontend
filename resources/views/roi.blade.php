@@ -18,7 +18,7 @@
                     <div class="flex flex-col items-center">
                         <span class="mb-2 font-semibold text-gray-700">Source Image A</span>
                         <div class="relative border-2 border-dashed border-gray-300 cursor-crosshair overflow-hidden w-full bg-gray-100" id="container-1">
-                            <img src="{{ session('image1_url','https://demofree.sirv.com/nope-not-here.jpg?w=300') }}" 
+                            <img src="{{ session('image1_url','https://demofree.sirv.com/nope-not-here.jpg') }}" 
                                 alt="Test 1" 
                                 class="w-full h-full object-contain select-none pointer-events-none">
                         </div>
@@ -28,7 +28,7 @@
                     <div class="flex flex-col items-center">
                         <span class="mb-2 font-semibold text-gray-700">Source Image B</span>
                         <div class="relative border-2 border-dashed border-gray-300 cursor-crosshair overflow-hidden w-full bg-gray-100" id="container-2">
-                            <img src="{{ session('image2_url','https://demofree.sirv.com/nope-not-here.jpg?w=300') }}" 
+                            <img src="{{ session('image2_url','https://demofree.sirv.com/nope-not-here.jpg') }}" 
                                 alt="Test 2" 
                                 class="w-full h-full object-contain select-none pointer-events-none">
                         </div>
@@ -160,9 +160,6 @@
                                 toast: false,
                                 position: 'center'
                             });
-                            
-                            // temporary navigation
-                            window.location.href = 'home'
 
                         } catch (error) {
                             Swal.fire({

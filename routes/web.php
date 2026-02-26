@@ -40,5 +40,6 @@ Route::middleware([
         return view('roi');
     })->name('roi');
 
-    Route::get('/result',[ResultController::class,'ShowResult'])->name('result');
+    Route::get('/result',[ResultController::class,'index'])->name('result');
+    Route::post('/result.show',[ResultController::class,'ShowResult'])->name('result.show');
 });
