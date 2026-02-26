@@ -18,7 +18,7 @@
                     <div class="flex flex-col items-center">
                         <span class="mb-2 font-semibold text-gray-700">Source Image A</span>
                         <div class="relative border-2 border-dashed border-gray-300 cursor-crosshair overflow-hidden w-full bg-gray-100" id="container-1">
-                            <img src="https://www.meddean.luc.edu/lumen/meded/medicine/pulmonar/cxr/atlas/images/71bl.jpg" 
+                            <img src="{{ session('image1_url') }}" 
                                 alt="Test 1" 
                                 class="w-full h-full object-contain select-none pointer-events-none">
                         </div>
@@ -28,7 +28,7 @@
                     <div class="flex flex-col items-center">
                         <span class="mb-2 font-semibold text-gray-700">Source Image B</span>
                         <div class="relative border-2 border-dashed border-gray-300 cursor-crosshair overflow-hidden w-full bg-gray-100" id="container-2">
-                            <img src="https://litfl.com/wp-content/uploads/2018/05/CXR-CASE-150-CXR-LITFL.jpg" 
+                            <img src="{{ session('image2_url') }}" 
                                 alt="Test 2" 
                                 class="w-full h-full object-contain select-none pointer-events-none">
                         </div>
