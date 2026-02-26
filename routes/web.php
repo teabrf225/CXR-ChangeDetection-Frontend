@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ImageUploadController;
+use App\Http\Controllers\ResultController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,4 +39,6 @@ Route::middleware([
     Route::get('/roi', function (){
         return view('roi');
     })->name('roi');
+
+    Route::get('/result',[ResultController::class,'ShowResult'])->name('result');
 });
