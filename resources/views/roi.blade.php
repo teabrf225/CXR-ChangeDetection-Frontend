@@ -133,9 +133,9 @@
                     submitBtn.disabled = true;
                     submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
 
-                    Swal.fire({
+                    Swal.fire({     
                         title: 'AI Processing...',
-                        html: 'Analyzing images via secure gateway.',
+                        html: 'Analyzing images please wait a moment',
                         allowOutsideClick: false,
                         showConfirmButton: false,
                         didOpen: () => {

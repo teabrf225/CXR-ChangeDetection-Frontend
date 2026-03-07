@@ -24,7 +24,7 @@ class ImageUploadController extends Controller
             'images.*' => 'image|mimes:jpeg,png,jpg|max:20480',
         ], [
             'images.size' => 'You must upload exactly 2 images.',
-            'images.*.max' => 'Each image must not exceed 20MB.'
+            'images.*.max' => 'Each image must not exceed 20MB.',
         ]);
 
         if (!$request->hasFile('images')) {
@@ -38,18 +38,20 @@ class ImageUploadController extends Controller
             $hash2 = hash_file('sha256', $files[1]->getRealPath());
             if ($hash1 === $hash2) {
                 return back()->withInput()->withErrors([
-                    'images' => 'The two images provided are identical. Please upload different images for comparison.'
+                    'images' => 'The two images provided are identical. Please upload different images for comparison.',
                 ]);
             }
 
+            $sessionData = [];
+
             foreach ($files as $index => $file) {
-                $data = file_get_contents($file->getRealPath());
-                $mime = $file->getMimeType();
-                $base64 = base64_encode($data);
+                $resizedJpeg = $this->resizeImageTo640($file->getRealPath(), $file->getMimeType());
+
+                $base64 = base64_encode($resizedJpeg);
 
                 $num = $index + 1;
                 $sessionData["image{$num}_base64"] = $base64;
-                $sessionData["image{$num}_url"] = "data:{$mime};base64,{$base64}";
+                $sessionData["image{$num}_url"] = "data:image/jpeg;base64,{$base64}";
                 $sessionData["image{$num}_filename"] = $file->getClientOriginalName();
             }
 
@@ -59,5 +61,51 @@ class ImageUploadController extends Controller
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Processing failed: ' . $e->getMessage());
         }
+    }
+
+    private function resizeImageTo640(string $path, string $mimeType): string
+    {
+        $src = match ($mimeType) {
+            'image/png' => imagecreatefrompng($path),
+            'image/jpeg',
+            'image/jpg' => imagecreatefromjpeg($path),
+            default => imagecreatefromjpeg($path),
+        };
+
+        if ($src === false) {
+            throw new \RuntimeException("GD could not open the image file.");
+        }
+
+        $originalW = imagesx($src);
+        $originalH = imagesy($src);
+
+        if ($originalW <= 640) {
+            ob_start();
+            imagejpeg($src, null, 90);
+            $jpeg = ob_get_clean();
+            imagedestroy($src);
+            return $jpeg;
+        }
+
+        $targetW = 640;
+        $targetH = (int) round($originalH * ($targetW / $originalW));
+
+        $dst = imagecreatetruecolor($targetW, $targetH);
+
+        if ($mimeType === 'image/png') {
+            $white = imagecolorallocate($dst, 255, 255, 255);
+            imagefill($dst, 0, 0, $white);
+        }
+
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $targetW, $targetH, $originalW, $originalH);
+
+        ob_start();
+        imagejpeg($dst, null, 90);
+        $jpeg = ob_get_clean();
+
+        imagedestroy($src);
+        imagedestroy($dst);
+
+        return $jpeg;
     }
 }
