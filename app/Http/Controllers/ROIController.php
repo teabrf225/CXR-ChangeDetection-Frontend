@@ -20,36 +20,31 @@ class ROIController extends Controller
     }
 
     public function analyze(Request $request)
-    {
-        try {
-            $google2fa = new Google2FA();
-            $otp = $google2fa->getCurrentOtp(config('services.ai.secret'));
+{
+    try {
+        $google2fa = new Google2FA();
+        $otp = $google2fa->getCurrentOtp(config('services.ai.secret'));
 
-            $payload = [
-                'image1_base64' => session('image1_base64'),
-                'image2_base64' => session('image2_base64'),
-                'roi' => $request->input('roi')
-            ];
+        $payload = [
+            'image1_base64' => $request->input('image1_base64'),
+            'image2_base64' => $request->input('image2_base64'),
+            'roi'           => $request->input('roi')
+        ];
 
-            $response = Http::withHeaders([
-                'x-api-key' => $otp,
-                'Content-Type' => 'application/json',
-            ])->timeout(60)->post(config('services.ai.url'), $payload);
+        $response = Http::withHeaders([
+            'x-api-key' => $otp,
+        ])->timeout(60)->post(config('services.ai.url'), $payload);
 
-            if ($response->failed()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'AI Service Error: ' . ($response->json()['detail'] ?? 'Unknown error')
-                ], 502);
-            }
-
-            return response()->json($response->json());
-
-        } catch (\Exception $e) {
+        if ($response->failed()) {
             return response()->json([
-                'status' => 'error', 
-                'message' => 'Server Error: ' . $e->getMessage()
-            ], 500);
+                'status' => 'error',
+                'message' => $response->json()['detail'] ?? 'AI Service Error'
+            ], $response->status());
         }
+
+        return response()->json($response->json());
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
     }
+}
 }

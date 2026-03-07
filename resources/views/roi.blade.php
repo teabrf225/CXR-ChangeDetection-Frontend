@@ -152,6 +152,8 @@
                                 'Accept': 'application/json'
                             },
                             body: JSON.stringify({
+                                image1_base64: "{{ session('image1_base64') }}",
+                                image2_base64: "{{ session('image2_base64') }}",
                                 roi: {
                                     target: {
                                         xy_start: [parseFloat(containers[0].roi.x1), parseFloat(containers[0].roi.y1)],
