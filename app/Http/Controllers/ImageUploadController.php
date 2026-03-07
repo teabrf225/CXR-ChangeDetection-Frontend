@@ -43,10 +43,9 @@ class ImageUploadController extends Controller
             }
 
             foreach ($files as $index => $file) {
-                // $data = file_get_contents($file->getRealPath());
+                $data = file_get_contents($file->getRealPath());
                 // $mime = $file->getMimeType();
-                $resizedJpeg = $this->resizeImageTo640($file->getRealPath(), $file->getMimeType());
-                $base64 = base64_encode($resizedJpeg);
+                $base64 = base64_encode($data);
 
                 $num = $index + 1;
                 $sessionData["image{$num}_base64"] = $base64;
@@ -65,9 +64,9 @@ class ImageUploadController extends Controller
     private function resizeImageTo640(string $path, string $mimeType): string
     {
         $src = match (strtolower($mimeType)) {
-            'image/png' => imagecreatefrompng($path),
+            'image/png'               => imagecreatefrompng($path),
             'image/jpeg', 'image/jpg' => imagecreatefromjpeg($path),
-            default => imagecreatefromjpeg($path),
+            default                   => imagecreatefromjpeg($path),
         };
 
         if ($src === false) {
@@ -89,7 +88,6 @@ class ImageUploadController extends Controller
         $targetH = (int) round($originalH * ($targetW / $originalW));
 
         $dst = imagecreatetruecolor($targetW, $targetH);
-
         $white = imagecolorallocate($dst, 255, 255, 255);
         imagefill($dst, 0, 0, $white);
 
