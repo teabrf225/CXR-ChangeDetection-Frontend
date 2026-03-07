@@ -43,9 +43,10 @@ class ImageUploadController extends Controller
             }
 
             foreach ($files as $index => $file) {
-                $data = file_get_contents($file->getRealPath());
+                // $data = file_get_contents($file->getRealPath());
                 // $mime = $file->getMimeType();
-                $base64 = base64_encode($data);
+                $resizedJpeg = $this->resizeImageTo640($file->getRealPath(), $file->getMimeType());
+                $base64 = base64_encode($resizedJpeg);
 
                 $num = $index + 1;
                 $sessionData["image{$num}_base64"] = $base64;
@@ -59,5 +60,48 @@ class ImageUploadController extends Controller
         } catch (\Exception $e) {
             return back()->withInput()->with('error', 'Processing failed: ' . $e->getMessage());
         }
+    }
+
+    private function resizeImageTo640(string $path, string $mimeType): string
+    {
+        $src = match (strtolower($mimeType)) {
+            'image/png' => imagecreatefrompng($path),
+            'image/jpeg', 'image/jpg' => imagecreatefromjpeg($path),
+            default => imagecreatefromjpeg($path),
+        };
+
+        if ($src === false) {
+            throw new \RuntimeException("GD failed to open image: {$path}");
+        }
+
+        $originalW = imagesx($src);
+        $originalH = imagesy($src);
+
+        if ($originalW <= 640) {
+            ob_start();
+            imagejpeg($src, null, 75);
+            $jpeg = ob_get_clean();
+            imagedestroy($src);
+            return $jpeg;
+        }
+
+        $targetW = 640;
+        $targetH = (int) round($originalH * ($targetW / $originalW));
+
+        $dst = imagecreatetruecolor($targetW, $targetH);
+
+        $white = imagecolorallocate($dst, 255, 255, 255);
+        imagefill($dst, 0, 0, $white);
+
+        imagecopyresampled($dst, $src, 0, 0, 0, 0, $targetW, $targetH, $originalW, $originalH);
+
+        ob_start();
+        imagejpeg($dst, null, 75);
+        $jpeg = ob_get_clean();
+
+        imagedestroy($src);
+        imagedestroy($dst);
+
+        return $jpeg;
     }
 }
