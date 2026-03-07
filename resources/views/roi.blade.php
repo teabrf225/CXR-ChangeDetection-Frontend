@@ -22,7 +22,7 @@
                         <span class="mb-2 font-semibold text-gray-700">Source Image A</span>
                         <div class="relative border-2 border-dashed border-gray-300 cursor-crosshair overflow-hidden w-full bg-gray-100"
                             id="container-1">
-                            <img src="{{ session('image1_url', 'https://demofree.sirv.com/nope-not-here.jpg') }}"
+                            <img src="{{ 'data:image/jpeg;base64,' . session('image1_base64', 'https://demofree.sirv.com/nope-not-here.jpg') }}"
                                 alt="Test 1" class="w-full h-full object-contain select-none pointer-events-none">
                         </div>
                         <p class="mt-2 text-sm text-gray-500 font-mono">Coords (center): <span id="coords-1">None</span>
@@ -33,7 +33,7 @@
                         <span class="mb-2 font-semibold text-gray-700">Source Image B</span>
                         <div class="relative border-2 border-dashed border-gray-300 cursor-crosshair overflow-hidden w-full bg-gray-100"
                             id="container-2">
-                            <img src="{{ session('image2_url', 'https://demofree.sirv.com/nope-not-here.jpg') }}"
+                            <img src="{{ 'data:image/jpeg;base64,' . session('image2_base64', 'https://demofree.sirv.com/nope-not-here.jpg') }}"
                                 alt="Test 2" class="w-full h-full object-contain select-none pointer-events-none">
                         </div>
                         <p class="mt-2 text-sm text-gray-500 font-mono">Coords (center): <span id="coords-2">None</span>
