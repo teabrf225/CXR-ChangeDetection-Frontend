@@ -6,6 +6,7 @@ services:
     env_file: .env
     volumes:
       - laravel_storage:/var/www/storage/app
+      - laravel_public_build:/var/www/public/build
     networks:
       - backend
 
@@ -17,8 +18,9 @@ services:
       - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - .:/var/www
+      - ./public:/var/www/public
       - laravel_storage:/var/www/storage/app
+      - laravel_public_build:/var/www/public/build
     networks:
       - backend
     depends_on:
@@ -43,3 +45,4 @@ networks:
 volumes:
   mysql_data:
   laravel_storage:
+  laravel_public_build: 
