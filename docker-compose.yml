@@ -4,22 +4,24 @@ services:
     container_name: laravel-prod-app
     restart: always
     env_file: .env
+    volumes:
+      - laravel_storage:/var/www/storage/app
     networks:
       - backend
 
   webserver:
     image: nginx:alpine
     container_name: laravel-nginx
+    restart: always
     ports:
       - "80:80"
     volumes:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
-      - .:/var/www:delegated 
+      - laravel_storage:/var/www/storage/app
     networks:
       - backend
     depends_on:
       - app
-      - db
 
   db:
     image: mysql:8.0
@@ -39,3 +41,4 @@ networks:
 
 volumes:
   mysql_data:
+  laravel_storage:
