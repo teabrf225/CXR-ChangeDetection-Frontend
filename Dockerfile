@@ -15,14 +15,15 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 WORKDIR /var/www
+
 COPY . /var/www
 COPY --from=asset-builder /app/public/build /var/www/public/build
 
 RUN composer install --optimize-autoloader --no-dev
 
 RUN mkdir -p /var/www/storage/framework/sessions \
-    mkdir -p /var/www/storage/framework/views \
-    mkdir -p /var/www/storage/framework/cache \
+    && mkdir -p /var/www/storage/framework/views \
+    && mkdir -p /var/www/storage/framework/cache \
     && chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 
 COPY docker-entrypoint.sh /usr/local/bin/

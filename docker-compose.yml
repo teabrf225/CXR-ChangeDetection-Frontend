@@ -23,6 +23,7 @@ services:
       - backend
     depends_on:
       - app
+
   db:
     image: mysql:8.0
     container_name: production-db
