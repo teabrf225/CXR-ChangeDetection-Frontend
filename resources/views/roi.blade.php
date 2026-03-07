@@ -135,7 +135,7 @@
 
                     Swal.fire({
                         title: 'AI Processing...',
-                        html: 'Please wait while we analyze the images.',
+                        html: 'Analyzing images via secure gateway.',
                         allowOutsideClick: false,
                         showConfirmButton: false,
                         didOpen: () => {
@@ -144,40 +144,30 @@
                     });
 
                     try {
-                        const otpResponse = await fetch('/get-api-key', {
-                            headers: { 'Accept': 'application/json' }
-                        });
-
-                        if (!otpResponse.ok) throw new Error('Failed to synchronize security key.');
-                        const otpData = await otpResponse.json();
-
-                        const payload = {
-                            image1_base64: "{{ session('image1_base64') }}",
-                            image2_base64: "{{ session('image2_base64') }}",
-                            roi: {
-                                target: {
-                                    xy_start: [parseFloat(containers[0].roi.x1), parseFloat(containers[0].roi.y1)],
-                                    xy_end: [parseFloat(containers[0].roi.x2), parseFloat(containers[0].roi.y2)]
-                                },
-                                source: {
-                                    xy_start: [parseFloat(containers[1].roi.x1), parseFloat(containers[1].roi.y1)],
-                                    xy_end: [parseFloat(containers[1].roi.x2), parseFloat(containers[1].roi.y2)]
-                                }
-                            }
-                        };
-
-                        const response = await fetch('http://127.0.0.1:8701/api/v1/analyze', {
+                        const response = await fetch("{{ route('ai.analyze') }}", {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'x-api-key': otpData.otp
+                                'X-CSRF-TOKEN': "{{ csrf_token() }}",
+                                'Accept': 'application/json'
                             },
-                            body: JSON.stringify(payload)
+                            body: JSON.stringify({
+                                roi: {
+                                    target: {
+                                        xy_start: [parseFloat(containers[0].roi.x1), parseFloat(containers[0].roi.y1)],
+                                        xy_end: [parseFloat(containers[0].roi.x2), parseFloat(containers[0].roi.y2)]
+                                    },
+                                    source: {
+                                        xy_start: [parseFloat(containers[1].roi.x1), parseFloat(containers[1].roi.y1)],
+                                        xy_end: [parseFloat(containers[1].roi.x2), parseFloat(containers[1].roi.y2)]
+                                    }
+                                }
+                            })
                         });
 
                         const result = await response.json();
 
-                        if (result.status === 'success') {
+                        if (response.ok && result.status === 'success') {
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Analysis Complete',
@@ -198,11 +188,13 @@
 
                             const fields = ['image_source', 'image_target', 'image_changeMap'];
                             fields.forEach(fieldName => {
-                                const input = document.createElement('input');
-                                input.type = 'hidden';
-                                input.name = fieldName;
-                                input.value = result[fieldName];
-                                form.appendChild(input);
+                                if (result[fieldName]) {
+                                    const input = document.createElement('input');
+                                    input.type = 'hidden';
+                                    input.name = fieldName;
+                                    input.value = result[fieldName];
+                                    form.appendChild(input);
+                                }
                             });
 
                             document.body.appendChild(form);
@@ -217,6 +209,7 @@
                         submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
 
                         Swal.fire({ icon: 'error', title: 'Error', text: error.message });
+                        console.error('Deployment Error:', error);
                     }
                 });
             }

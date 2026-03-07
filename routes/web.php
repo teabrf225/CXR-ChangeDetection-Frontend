@@ -43,6 +43,7 @@ Route::middleware([
     Route::get('/result', [ResultController::class, 'ShowResult'])->name('result');
     Route::post('/result.show', [ResultController::class, 'ShowResult'])->name('results.show');
 
+    Route::post('/analyze-images', [ROIController::class, 'analyze'])->name('ai.analyze');
     Route::get('/get-api-key', function () {
         try {
             $google2fa = new Google2FA();

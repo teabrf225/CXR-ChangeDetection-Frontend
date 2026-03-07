@@ -30,5 +30,9 @@ return [
         'secret' => env('AWS_SECRET_ACCESS_KEY'),
         'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
     ],
+    'ai' => [
+        'url' => env('AI_SERVICE_URL', 'http://10.0.0.3:8701/api/v1/analyze'),
+        'secret' => env('SHARED_SECRET'),
+    ],
 
 ];
