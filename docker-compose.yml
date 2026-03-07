@@ -1,0 +1,38 @@
+services:
+  app:
+    build: .
+    container_name: laravel-prod-app
+    restart: always
+    env_file: .env
+    networks:
+      - backend
+
+  webserver:
+    image: nginx:alpine
+    container_name: laravel-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+      - .:/var/www
+    networks:
+      - backend
+
+  db:
+    image: mysql:8.0
+    container_name: production-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - backend
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  mysql_data:
