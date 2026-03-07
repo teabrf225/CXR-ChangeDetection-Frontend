@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\ResultController;
 use PragmaRX\Google2FA\Google2FA;
@@ -17,9 +18,7 @@ use App\Http\Controllers\ROIController;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', [HomeController::class,'index_without_login'])->name('welcome');
 
 Route::middleware([
     'auth:sanctum',
@@ -31,9 +30,7 @@ Route::middleware([
         return redirect('/home');
     })->name('dashboard');
 
-    Route::get('/home', function () {
-        return view('home');
-    })->name('home');
+    Route::get('/home', [HomeController::class,'index'])->name('home');
 
     Route::get('/upload', [ImageUploadController::class, 'index'])->name('upload-image.form');
     Route::post('/upload.process-images', [ImageUploadController::class, 'process'])->name('upload.images.process');
