@@ -52,4 +52,8 @@ Route::middleware([
             return response()->json(['error' => $e->getMessage()], 500);
         }
     })->name('get-api-key');
+
+    Route::get('/about-us',function(){
+        return view('about-us');
+    })->name('about-us');
 });

@@ -26,13 +26,17 @@
     .step-icon {
         width: 40px; 
         height: 40px;
-        transition: all 0.3s ease;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        background-color: #f1f5f9 !important; 
+        color: #475569 !important; 
     }
 
     .workflow-step-item:hover .step-icon {
         transform: scale(1.1);
         background-color: #2b6cb0 !important;
+        color: #ffffff !important;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     }
     .workflow-step-item:last-child {
         padding-bottom: 0;
@@ -86,7 +90,7 @@
                         
                         <div class="workflow-step-item d-flex">
                             <div class="flex-shrink-0">
-                                <div class="step-icon bg-blue-600 text-white rounded-circle d-flex align-items-center justify-content-center">
+                                <div class="step-icon bg-blue-600 rounded-circle d-flex align-items-center justify-content-center">
                                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
                                 </div>
                             </div>
@@ -100,7 +104,7 @@
 
                         <div class="workflow-step-item d-flex">
                             <div class="flex-shrink-0">
-                                <div class="step-icon bg-blue-600 text-white rounded-circle d-flex align-items-center justify-content-center">
+                                <div class="step-icon bg-blue-600 rounded-circle d-flex align-items-center justify-content-center">
                                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2 4l2 2m15-2l-2 2m2 12l-2-2M4 18l2-2m0-10l8 8m-4-4l8-8"></path></svg>
                                 </div>
                             </div>
@@ -114,7 +118,7 @@
 
                         <div class="workflow-step-item d-flex">
                             <div class="flex-shrink-0">
-                                <div class="step-icon bg-green-500 text-white rounded-circle d-flex align-items-center justify-content-center">
+                                <div class="step-icon bg-green-500 rounded-circle d-flex align-items-center justify-content-center">
                                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
                                 </div>
                             </div>
@@ -159,7 +163,7 @@
         </div>
     </div>
 
-    <div class="py-20 bg-gray-50 border-top mt-5">
+    <div class="py-20 bg-gray-50 border-top my-5">
         <div class="container text-center">
             <div class="row justify-content-center">
                 <div class="col-lg-7">
@@ -185,10 +189,4 @@
             </div>
         </div>
     </div>
-
-    <footer class="py-10 bg-white border-top mt-5">
-        <div class="container text-center">
-            <p class="text-gray-400 small mb-0">© 2026 CXR ChangeDetection By Basic Research| Khon Kaen University. All rights reserved.</p>
-        </div>
-    </footer>
 </x-guest-layout>
