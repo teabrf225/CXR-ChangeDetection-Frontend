@@ -22,7 +22,7 @@
                     </x-nav-link>
                 </div>
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                    <x-nav-link href="{{ route('upload-image.form') }}" :active="request()->routeIs('upload')">
+                    <x-nav-link href="{{ route('upload-image.form') }}" :active="request()->routeIs('upload-image.form')">
                         {{ __('Upload') }}
                     </x-nav-link>
                 </div>
@@ -34,6 +34,11 @@
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link href="{{ route('result') }}" :active="request()->routeIs('result')">
                         {{ __('RESULT') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link href="{{ route('about-us') }}" :active="request()->routeIs('about-us')">
+                        {{ __('ABOUT US') }}
                     </x-nav-link>
                 </div>
             </div>
