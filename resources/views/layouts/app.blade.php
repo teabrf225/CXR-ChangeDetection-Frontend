@@ -25,7 +25,7 @@
     </head>
 
     <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-50">
+        <div class="min-h-screen bg-gray-50 d-flex flex-column">
             @livewire('navigation-menu')
 
             <!-- Page Heading -->
@@ -38,9 +38,36 @@
             @endif -->
 
             <!-- Page Content -->
-            <main class="mt-8">
+            <main class="mt-8 flex-grow-1">
                 {{ $slot }}
             </main>
+
+            <footer class="py-4 bg-white border-top mt-auto">
+                <div class="container" style="max-width: 1100px;"> <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                        
+                        <div class="d-flex align-items-center">
+                            <div class="me-3">
+                                <x-application-mark class="h-10 w-auto" />
+                            </div>
+                            <div class="border-start ps-3 border-gray-200">
+                                <div class="fw-bold text-blue-600 mb-0" style="font-size: 0.85rem; letter-spacing: 0.5px;">BASIC RESEARCH</div>
+                                <div class="text-gray-900 fw-bold" style="font-size: 1.1rem; line-height: 1;">
+                                    CXR <span class="text-primary text-blue-600">ChangeDetection</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center text-md-end">
+                            <div class="text-gray-500 mb-1" style="font-size: 0.8rem;">
+                                © 2026 CXR ChangeDetection | Developed by <strong class="text-gray-700">Basic Research</strong>. All rights reserved.
+                            </div>
+                            <div class="d-flex align-items-center justify-content-center justify-content-md-end gap-2">
+                                <span class="text-gray-400" style="font-size: 0.75rem;">College of Computing, Khon Kaen University</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
 
         @stack('modals')
