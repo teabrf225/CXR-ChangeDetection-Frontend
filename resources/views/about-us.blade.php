@@ -104,7 +104,7 @@
         .bg-frontend { background: #dbeafe; color: #1e40af; border: 1px solid #bfdbfe; }
         .bg-backend { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 
-        .velocity-chip { padding: 4px 10px; border-radius: 6px; font-weight: 800; font-size: 0.75rem; display: inline-block; }
+        .velocity-chip { padding: 4px 12px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; display: inline-block; }
         .velocity-high { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
 
         /* Avatar Decoration */
@@ -164,7 +164,7 @@
                                     <div class="h1 fw-bold text-emerald-600 mb-0">6.57</div>
                                 </div>
                                 <div class="col border-start border-emerald-200 ms-3 ps-3">
-                                    <div class="text-xs text-emerald-700 fw-bold text-uppercase tracking-widest mb-1">Performance Metric</div>
+                                    <div class="text-xs text-emerald-700 fw-bold text-uppercase tracking-widest mb-1">Best Performance Metric</div>
                                     <div class="small text-slate-600 fw-bold uppercase tracking-wider">Peak Velocity<br><span class="text-emerald-500">Sprint 4 Integration</span></div>
                                 </div>
                             </div>
@@ -176,7 +176,7 @@
                         <table class="table table-custom mb-0 bg-white text-center align-middle">
                             <thead>
                                 <tr>
-                                    <th>Interval</th>
+                                    <th>Sprint</th>
                                     <th>Estimated Burndown</th>
                                     <th>Real Burndown</th>
                                     <th>Velocity</th>
@@ -202,16 +202,30 @@
                                 <tr>
                                     <td>4</td>
                                     <td>40.4 pts</td>
-                                    <td><span class="text-emerald-600 fw-bold">5 pts</span></td>
+                                    <td>5 pts</td>
                                     <td><span class="velocity-chip velocity-high">6.57</span></td> </tr>
                                 <tr>
                                     <td>5</td>
                                     <td>20.2 pts</td>
-                                    <td class="text-slate-300">In Progress</td>
-                                    <td class="text-slate-300">--</td>
+                                    <td><span class="text-emerald-600 fw-bold">0 pts</span></td>
+                                    <td><span class="velocity-chip velocity-low">0.71</span></td>
                                 </tr>
                             </tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-5">
+                <div class="col-12">
+                    <div class="card border-0 bg-slate-50 rounded-4 p-4 p-lg-5">
+                        <div class="text-center mb-4">
+                            <h3 class="h5 fw-bold text-slate-800 mb-2">Product Burndown & Velocity Tracking</h3>
+                            <p class="text-muted small">Visualizing development pace and task completion across sprints</p>
+                        </div>
+
+                        <div style="position: relative; height:450px; width:100%">
+                            <canvas id="burndownChart"></canvas>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -346,4 +360,106 @@
             </p>
         </div>
     </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const ctx = document.getElementById('burndownChart').getContext('2d');
+        
+        const sprintLabels = ['Sprint 1', 'Sprint 2', 'Sprint 3', 'Sprint 4', 'Sprint 5', 'Sprint 6'];
+
+        new Chart(ctx, {
+            data: {
+                labels: sprintLabels,
+                datasets: [
+                    {
+                        type: 'line',
+                        label: 'Velocity (Performance)',
+                        data: [5.14, 0.8, 1.14, 6.57, 0.71, 0],
+                        borderColor: '#0d9488',
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        stepped: true,
+                        pointStyle: 'rectRot',
+                        pointRadius: 6,
+                        pointBackgroundColor: '#0d9488',
+                        yAxisID: 'y_velocity'
+                    },
+                    {
+                        type: 'line',
+                        label: 'Real Burndown',
+                        data: [101, 65, 51, 5, 0, null],
+                        borderColor: '#2563eb',
+                        backgroundColor: 'rgba(37, 99, 235, 0.05)',
+                        borderWidth: 4,
+                        fill: true,
+                        tension: 0.2,
+                        yAxisID: 'y'
+                    },
+                    {
+                        type: 'line',
+                        label: 'Estimated (Plan)',
+                        data: [101, 80.8, 60.6, 40.4, 20.2, 0],
+                        borderColor: '#cbd5e1',
+                        borderDash: [6, 4],
+                        borderWidth: 2,
+                        fill: false,
+                        yAxisID: 'y'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                        align: 'end',
+                        labels: {
+                            usePointStyle: true,
+                            boxWidth: 10,
+                            font: { size: 12, weight: '600' }
+                        }
+                    },
+                    tooltip: {
+                        padding: 12,
+                        backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    }
+                },
+                scales: {
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: {
+                            display: true,
+                            text: 'Remaining Story Points',
+                            font: { weight: 'bold' }
+                        },
+                        beginAtZero: true
+                    },
+                    y_velocity: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        grid: { drawOnChartArea: false },
+                        title: {
+                            display: true,
+                            text: 'Velocity (pts / week)',
+                            font: { weight: 'bold' }
+                        },
+                        min: 0,
+                        max: 15
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    </script>
 </x-app-layout>
