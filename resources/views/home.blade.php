@@ -79,7 +79,7 @@
                 <div class="col-12 col-lg-3">
                     <div class="card border-0 shadow-sm rounded-lg bg-white mb-4">
                         <div class="card-body p-4">
-                            <h3 class="font-bold text-lg mb-4 text-gray-800 border-bottom pb-2">Analysis Workflow</h3>
+                            <h3 class="font-bold text-lg mb-4 text-gray-800 border-bottom pb-2">Analysis Pipeline</h3>
                             <div class="space-y-4">
                                 <div class="workflow-step d-flex">
                                     <div class="bg-gray-100 text-gray-700 rounded-circle h-6 w-6 flex items-center justify-center me-3 shrink-0 small fw-bold" style="width:24px; height:24px;">1</div>
