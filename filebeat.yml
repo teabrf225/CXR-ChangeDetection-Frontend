@@ -1,0 +1,23 @@
+filebeat.inputs:
+- type: log
+  enabled: true
+  paths:
+    - /var/log/nginx/access.log
+  fields:
+    service: nginx
+    log_type: access
+
+- type: log
+  enabled: true
+  paths:
+    - /var/log/nginx/error.log
+  fields:
+    service: nginx
+    log_type: error
+
+output.logstash:
+  hosts: ["xx.xx.xx.xx:5044"]
+
+processors:
+  - add_host_metadata: ~
+  - add_docker_metadata: ~
